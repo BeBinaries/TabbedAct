@@ -72,7 +72,7 @@ public class MathTab2 extends Fragment implements
         super.onDestroyView();
         widget.setOnRecognitionListener(null);
         widget.setOnConfigureListener(null);
-
+        widget.clear(true);
         // release widget's resources
         widget.release();
     }
