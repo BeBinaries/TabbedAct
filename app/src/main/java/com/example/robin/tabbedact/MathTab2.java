@@ -16,6 +16,8 @@ import android.widget.Toast;
 import com.myscript.atk.math.widget.MathWidgetApi;
 import com.myscript.certificate.MyCertificate;
 
+import static android.R.style.Widget;
+
 /**
  * Created by robin on 7/10/17.
  */
@@ -52,7 +54,6 @@ public class MathTab2 extends Fragment implements
             return;
         }
         widget.setOnConfigureListener(this);
-        widget.setOnRecognitionListener(this);
 
         // references assets directly from the APK to avoid extraction in application
         // file system
@@ -65,6 +66,18 @@ public class MathTab2 extends Fragment implements
         // "math" references the conf/math/math.conf file in your assets.
         // "standard" references the configuration name in math.conf
         widget.configure("math", "standard");
+        widget.setOnRecognitionListener(new MathWidgetApi.OnRecognitionListener() {
+            @Override
+            public void onRecognitionBegin(MathWidgetApi mathWidgetApi) {
+
+            }
+
+            @Override
+            public void onRecognitionEnd(MathWidgetApi mathWidgetApi) {
+                new MainActivity().message = widget.getResultAsText();
+                new MainActivity().send();
+            }
+        });
     }
     @Override
     public void onDestroyView()

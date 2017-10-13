@@ -11,5 +11,5 @@
         android:id="@+id/action_IpConfig"
         android:orderInCategory="100"
         android:title="@string/Ip"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
 </menu>
