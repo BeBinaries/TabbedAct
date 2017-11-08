@@ -1,6 +1,7 @@
 package com.example.robin.tabbedact;
 
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -24,6 +25,7 @@ public class GeometryTab3 extends Fragment implements
     private static final String TAG = "GeometryDemo";
 
     private GeometryWidgetApi widget;
+    private Bitmap bmp;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,6 +33,9 @@ public class GeometryTab3 extends Fragment implements
         View rootView = inflater.inflate(R.layout.geometry_window3, container, false);
         return rootView;
     }
+
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         widget = (GeometryWidgetApi)view. findViewById(R.id.geometry_widget);
@@ -108,5 +113,8 @@ public class GeometryTab3 extends Fragment implements
         {
             Log.d(TAG, "Geometry Widget recognition");
         }
+        bmp = widget.getResultAsImage();
+
+        //new MainActivity().send(MainActivity.BitMapToString(bmp));
     }
 }

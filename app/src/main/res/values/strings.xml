@@ -3,4 +3,15 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="Ip">IP Configuration</string>
+    <string name="space_button" />
+    <string name="delete_button" />
+    <string name="emoticon_button" />
+    <string name="action_clear" />
+    <string name="app_title" />
+    <string name="effect_felt_pen" />
+    <string name="effect_fountain_pen">Fountain pen</string>
+    <string name="effect_calligraphic_brush">Calligraphic brush</string>
+    <string name="effect_calligraphic_quill">Calligraphic quill</string>
+    <string name="effect_qalam">Qalam</string>
+    <string name="input_text"></string>
 </resources>

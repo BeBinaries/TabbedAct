@@ -66,18 +66,7 @@ public class MathTab2 extends Fragment implements
         // "math" references the conf/math/math.conf file in your assets.
         // "standard" references the configuration name in math.conf
         widget.configure("math", "standard");
-        widget.setOnRecognitionListener(new MathWidgetApi.OnRecognitionListener() {
-            @Override
-            public void onRecognitionBegin(MathWidgetApi mathWidgetApi) {
-
-            }
-
-            @Override
-            public void onRecognitionEnd(MathWidgetApi mathWidgetApi) {
-                new MainActivity().message = widget.getResultAsText();
-                new MainActivity().send();
-            }
-        });
+        widget.setOnRecognitionListener(this);
     }
     @Override
     public void onDestroyView()
@@ -114,12 +103,19 @@ public class MathTab2 extends Fragment implements
     }
 
     @Override
-    public void onRecognitionEnd(MathWidgetApi widget)
+    public void onRecognitionEnd(final MathWidgetApi widget)
     {
         Toast.makeText(getActivity().getApplicationContext(), "Recognition update", Toast.LENGTH_SHORT).show();
         if(BuildConfig.DEBUG)
         {
-            Log.d(TAG, "Math Widget recognition: " + widget.getResultAsText());
+           // Log.d(TAG, "Math Widget recognition: " + widget.getResultAsText());
         }
+        final Runnable r = new Runnable() {
+            public void run() {
+                new MainActivity().send(widget.getResultAsText());
+                Log.d(TAG, "Math Widget recognition: " + widget.getResultAsText());
+            }
+        };
+
     }
 }

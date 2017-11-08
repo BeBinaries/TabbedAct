@@ -1,6 +1,7 @@
 package com.example.robin.tabbedact;
 
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,6 +15,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,14 +25,16 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import static android.R.id.message;
+
 public class MainActivity extends AppCompatActivity {
     private static Socket s;
     private static PrintWriter pw;
-    public static String message ="";
     private static String ip ="";
 
     /**
@@ -119,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static void send() {
+    public void send(String message) {
         try {
             s = new Socket(ip, 5000);
             pw = new PrintWriter(s.getOutputStream());
@@ -129,8 +133,17 @@ public class MainActivity extends AppCompatActivity {
             s.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            send(null);
         }
+    }
+
+    public static String BitMapToString(Bitmap bitmap){
+        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
+        byte [] b=baos.toByteArray();
+        String temp= Base64.encodeToString(b, Base64.DEFAULT);
+        return temp;
     }
     /**
      * A placeholder fragment containing a simple view.
