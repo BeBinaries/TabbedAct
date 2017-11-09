@@ -25,9 +25,6 @@ import com.myscript.atk.sltw.SingleLineWidgetApi;
 import com.myscript.atk.text.CandidateInfo;
 import com.myscript.certificate.MyCertificate;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -55,16 +52,42 @@ public class LineTab1 extends Fragment implements
     private LinearLayout mCandidateBar;
     private GridView mCandidatePanel;
     private SingleLineWidgetApi mWidget;
-    private static Socket s;
-    private static PrintWriter pw;
-    private static String message = "";
-    private static String ip = "192.168.43.211";
     private int isCorrectionMode;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.line_window1, container, false);
+        Button b1 = (Button)rootView.findViewById(R.id.b1);
+        Button b2 = (Button)rootView.findViewById(R.id.b2);
+        Button b3 = (Button)rootView.findViewById(R.id.b3);
+        Button b4 = (Button)rootView.findViewById(R.id.b4);
+
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCandidateButtonClick(v);
+            }
+        });
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCandidateButtonClick(v);
+            }
+        });
+        b3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCandidateButtonClick(v);
+            }
+        });
+        b4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onMoreButtonClick(v);
+            }
+        });
+
         return rootView;
     }
 
@@ -125,11 +148,31 @@ public class LineTab1 extends Fragment implements
         mWidget.configure("en_US", "cur_text");
 
         mWidget.setText(mTextField.getText().toString());
-        int redColorValue = Color.RED;
+        int redColorValue = Color.rgb(0,0,200);
         mWidget.setTextColor(redColorValue);
         isCorrectionMode = 0;
     }
 
+    /*@Override
+    public void onClick(View v) {
+        LineTab1 lineTab1 = new LineTab1();
+        switch (v.getId()) {
+            case R.id.b1:
+                lineTab1.onCandidateButtonClick(v);
+                break;
+            case R.id.b2:
+                lineTab1.onCandidateButtonClick(v);
+                break;
+            case R.id.b3:
+                lineTab1.onCandidateButtonClick(v);
+                break;
+            case R.id.b4:
+                lineTab1.onMoreButtonClick(v);
+                break;
+            default:
+                //
+        }
+    }*/
     @Override
     public void onDestroyView()
     {
@@ -146,41 +189,30 @@ public class LineTab1 extends Fragment implements
 
     }
 
-    public static void send() {
-        try {
-            s = new Socket(ip, 5000);
-            pw = new PrintWriter(s.getOutputStream());
-            pw.write(message);
-            pw.flush();
-            pw.close();
-            s.close();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void onClearButtonClick(View v) {
+    /*public void onClearButtonClick(View v) {
         mWidget.clear();
     }
-
+    */
     public void onCandidateButtonClick(View v) {
         CandidateTag tag = (CandidateTag) v.getTag();
         if (tag != null) {
             mWidget.replaceCharacters(tag.start, tag.end, tag.text);
-            message = tag.text;
-            send();
+            Log.d(TAG, "candidate button click");
+            new MainActivity().send(tag.text);
         }
     }
 
     public void onMoreButtonClick(View v) {
         mCandidatePanel.setVisibility(mCandidatePanel.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
         updateCandidatePanel();
+        Log.d(TAG, "more button click");
     }
 
     public void onEmoticonButtonClick(View v) {
         int index = mWidget.getCursorIndex();
         mWidget.replaceCharacters(index, index, ":-)");
+        Log.d(TAG, "emoticon button click");
     }
 
     public void onSpaceButtonClick(View v) {
@@ -190,6 +222,7 @@ public class LineTab1 extends Fragment implements
             mWidget.setCursorIndex(index + 1);
             isCorrectionMode++;
         }
+        Log.d(TAG, "space button click");
     }
 
     public void onDeleteButtonClick(View v) {
@@ -200,26 +233,7 @@ public class LineTab1 extends Fragment implements
             mWidget.setCursorIndex(index - (info.getEnd() - info.getStart()));
             isCorrectionMode++;
         }
-    }
-
-    public void onPencilButtonClick(View v) {
-        PopupMenu popupMenu = new PopupMenu(getActivity(), v);
-
-        popupMenu.getMenu().add(Menu.NONE, IStroker.Stroking.FELT_PEN.ordinal(), Menu.NONE, R.string.effect_felt_pen);
-        popupMenu.getMenu().add(Menu.NONE, IStroker.Stroking.FOUNTAIN_PEN.ordinal(), Menu.NONE, R.string.effect_fountain_pen);
-        popupMenu.getMenu().add(Menu.NONE, IStroker.Stroking.CALLIGRAPHIC_BRUSH.ordinal(), Menu.NONE, R.string.effect_calligraphic_brush);
-        popupMenu.getMenu().add(Menu.NONE, IStroker.Stroking.CALLIGRAPHIC_QUILL.ordinal(), Menu.NONE, R.string.effect_calligraphic_quill);
-        popupMenu.getMenu().add(Menu.NONE, IStroker.Stroking.QALAM.ordinal(), Menu.NONE, R.string.effect_qalam);
-
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                mWidget.setInkEffect(IStroker.Stroking.values()[item.getItemId()]);
-                return true;
-            }
-        });
-
-        popupMenu.show();
+        Log.d(TAG, "delete button click");
     }
 
     @Override
@@ -411,7 +425,7 @@ public class LineTab1 extends Fragment implements
         if (index < 0) {
             index = 0;
         }
-
+        Log.d(TAG, "update candidate bar");
         CandidateInfo info = mWidget.getWordCandidates(index);
 
         int start = info.getStart();

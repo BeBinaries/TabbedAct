@@ -108,14 +108,8 @@ public class MathTab2 extends Fragment implements
         Toast.makeText(getActivity().getApplicationContext(), "Recognition update", Toast.LENGTH_SHORT).show();
         if(BuildConfig.DEBUG)
         {
-           // Log.d(TAG, "Math Widget recognition: " + widget.getResultAsText());
+            Log.d(TAG, "Math Widget recognition: " + widget.getResultAsText());
         }
-        final Runnable r = new Runnable() {
-            public void run() {
-                new MainActivity().send(widget.getResultAsText());
-                Log.d(TAG, "Math Widget recognition: " + widget.getResultAsText());
-            }
-        };
-
+        new MainActivity().send(widget.getResultAsText());
     }
 }
