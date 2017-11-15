@@ -15,6 +15,8 @@ import com.myscript.atk.geometry.widget.GeometryWidgetApi;
 import com.myscript.atk.math.widget.MathWidgetApi;
 import com.myscript.certificate.MyCertificate;
 
+import static com.example.robin.tabbedact.MainActivity.BitMapToString;
+
 /**
  * Created by robin on 7/10/17.
  */
@@ -115,6 +117,6 @@ public class GeometryTab3 extends Fragment implements
         }
         bmp = widget.getResultAsImage();
 
-        //new MainActivity().send(MainActivity.BitMapToString(bmp));
+        BitMapToString(bmp);
     }
 }

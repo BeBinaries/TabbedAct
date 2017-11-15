@@ -8,4 +8,6 @@
     <string name="delete_button">Del</string>
     <string name="action_clear">Clear</string>
     <string name="input_text"></string>
+    <string name="clearButton">Clear</string>
+    <string name="SendButton">Send</string>
 </resources>

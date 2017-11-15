@@ -1,5 +1,6 @@
 package com.example.robin.tabbedact;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.support.design.widget.TabLayout;
@@ -16,6 +17,7 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,8 +29,10 @@ import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 
 import static android.R.id.message;
 
@@ -36,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private static Socket s;
     private static PrintWriter pw;
     private static String ip ="";
-
+    private static final String TAG = "MainActivity";
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -56,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -117,13 +120,41 @@ public class MainActivity extends AppCompatActivity {
             });
 
             builder.show();
+            //new MainActivity().alertBilder();
         }
 
         return super.onOptionsItemSelected(item);
     }
-
-    public void send(String message) {
+    public void send(String message,Context context) {
         try {
+            Log.d(TAG,"inside try block");
+            if(ip.isEmpty()){
+                Log.d(TAG,"inside null check");
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Set IP");
+
+// Set up the input
+                final EditText input = new EditText(context);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT);
+                builder.setView(input);
+
+// Set up the buttons
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ip = input.getText().toString();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+            }
             s = new Socket(ip, 5000);
             pw = new PrintWriter(s.getOutputStream());
             pw.write(message);
@@ -132,17 +163,28 @@ public class MainActivity extends AppCompatActivity {
             s.close();
 
         } catch (IOException e) {
-            //e.printStackTrace();
-            send(null);
+            e.printStackTrace();
+            //send(null);
         }
     }
 
-    public static String BitMapToString(Bitmap bitmap){
+    public static void BitMapToString(Bitmap bitmap){
         ByteArrayOutputStream baos=new  ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
         byte [] b=baos.toByteArray();
+        try {
+            s = new Socket(ip, 5000);
+            OutputStream outputStream = s.getOutputStream();
+            byte[] size = ByteBuffer.allocate(4).putInt(baos.size()).array();
+            outputStream.write(size);
+            outputStream.write(baos.toByteArray());
+            outputStream.flush();
+            s.close();
+        }catch (IOException e)
+        {
+            e.printStackTrace();
+        }
         String temp= Base64.encodeToString(b, Base64.DEFAULT);
-        return temp;
     }
     /**
      * A placeholder fragment containing a simple view.

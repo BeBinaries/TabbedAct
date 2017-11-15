@@ -1,5 +1,6 @@
 package com.example.robin.tabbedact;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +35,20 @@ public class MathTab2 extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.math_window2, container, false);
+        Button b1 = (Button)rootView.findViewById(R.id.clearButton);
+        Button b2 = (Button)rootView.findViewById(R.id.sendButton);
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClearButtonClick(v);
+            }
+        });
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onSendButtonClick(view);
+            }
+        });
         return rootView;
     }
 
@@ -106,10 +122,16 @@ public class MathTab2 extends Fragment implements
     public void onRecognitionEnd(final MathWidgetApi widget)
     {
         Toast.makeText(getActivity().getApplicationContext(), "Recognition update", Toast.LENGTH_SHORT).show();
-        if(BuildConfig.DEBUG)
-        {
+        if(BuildConfig.DEBUG) {
             Log.d(TAG, "Math Widget recognition: " + widget.getResultAsText());
         }
-        new MainActivity().send(widget.getResultAsText());
+    }
+    public void onClearButtonClick(View v) {
+        widget.clear(true);
+    }
+    public void onSendButtonClick(View v)
+    {
+        Context mContext = getActivity() ;
+        new MainActivity().send(widget.getResultAsLaTeX(),mContext);
     }
 }
