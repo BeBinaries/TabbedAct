@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
         byte [] b=baos.toByteArray();
         try {
-            s = new Socket(ip, 5000);
+            s = new Socket(ip, 5001);
             OutputStream outputStream = s.getOutputStream();
             byte[] size = ByteBuffer.allocate(4).putInt(baos.size()).array();
             outputStream.write(size);

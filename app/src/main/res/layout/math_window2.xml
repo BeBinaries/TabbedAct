@@ -14,7 +14,11 @@
         android:id="@+id/math_widget"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="66dp" />
     <LinearLayout
         android:id="@+id/buttons"
         android:layout_width="match_parent"

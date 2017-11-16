@@ -2,6 +2,7 @@ package com.example.robin.tabbedact;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -19,6 +20,7 @@ import com.myscript.atk.math.widget.MathWidgetApi;
 import com.myscript.certificate.MyCertificate;
 
 import static android.R.style.Widget;
+import static com.example.robin.tabbedact.MainActivity.BitMapToString;
 
 /**
  * Created by robin on 7/10/17.
@@ -30,6 +32,7 @@ public class MathTab2 extends Fragment implements
 
     private MathWidgetApi widget;
     private static final String TAG = "MathDemo";
+    private Bitmap bmp;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -126,12 +129,14 @@ public class MathTab2 extends Fragment implements
             Log.d(TAG, "Math Widget recognition: " + widget.getResultAsText());
         }
     }
-    public void onClearButtonClick(View v) {
+    private void onClearButtonClick(View v) {
         widget.clear(true);
     }
-    public void onSendButtonClick(View v)
+    private void onSendButtonClick(View v)
     {
         Context mContext = getActivity() ;
-        new MainActivity().send(widget.getResultAsLaTeX(),mContext);
+        //new MainActivity().send(widget.getResultAsLaTeX(),mContext);
+        bmp = widget.getResultAsImage();
+        BitMapToString(bmp);
     }
 }
