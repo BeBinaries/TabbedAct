@@ -9,4 +9,5 @@
     <string name="input_text"></string>
     <string name="clearButton">Clear</string>
     <string name="SendButton">Send</string>
+    <string name="Signature">Signature</string>
 </resources>

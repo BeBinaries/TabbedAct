@@ -19,8 +19,6 @@ import android.widget.Toast;
 import com.myscript.atk.math.widget.MathWidgetApi;
 import com.myscript.certificate.MyCertificate;
 
-import static android.R.style.Widget;
-import static com.example.robin.tabbedact.MainActivity.BitMapToString;
 
 /**
  * Created by robin on 7/10/17.
@@ -137,6 +135,6 @@ public class MathTab2 extends Fragment implements
         Context mContext = getActivity() ;
         //new MainActivity().send(widget.getResultAsLaTeX(),mContext);
         bmp = widget.getResultAsImage();
-        BitMapToString(bmp);
+        new MainActivity().BitMapToString(bmp,mContext);
     }
 }

@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private static PrintWriter pw;
     private static String ip ="";
     private static final String TAG = "MainActivity";
+    CanvasView customCanvas;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -96,64 +97,66 @@ public class MainActivity extends AppCompatActivity {
         }
         if(id ==  R.id.action_IpConfig)
         {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Set IP");
+            ipSetting(MainActivity.this);
+        }
+        if(id == R.id.action_sign) {
+            final android.app.AlertDialog.Builder sign = new android.app.AlertDialog.Builder(this);
+            LayoutInflater inflater = getLayoutInflater();
+            View alertLayout = inflater.inflate(R.layout.layout_alert_sign, null);
+            customCanvas = (CanvasView)alertLayout.findViewById(R.id.signature_canvas);
 
-// Set up the input
-            final EditText input = new EditText(this);
-// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT);
-            builder.setView(input);
-
-// Set up the buttons
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            sign.setTitle("Signature");
+            sign.setView(alertLayout);
+            sign.setCancelable(false);
+            sign.setNegativeButton("Clear", new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    ip = input.getText().toString();
+                public void onClick(DialogInterface dialogInterface, int which) {
+                    //CanvasView customCanvas = (CanvasView) findViewById(R.id.signature_canvas);
+                    customCanvas.clearCanvas();
                 }
             });
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            sign.setPositiveButton("Send", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
+                    customCanvas.sendSignature();
                 }
             });
-
-            builder.show();
-            //new MainActivity().alertBilder();
+            sign.show();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    public void ipSetting(Context context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Set IP");
+
+// Set up the input
+        final EditText input = new EditText(context);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+// Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ip = input.getText().toString();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
     public void send(String message,Context context) {
         try {
             Log.d(TAG,"inside try block");
             if(ip.isEmpty()){
-                Log.d(TAG,"inside null check");
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("Set IP");
-
-// Set up the input
-                final EditText input = new EditText(context);
-// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT);
-                builder.setView(input);
-
-// Set up the buttons
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ip = input.getText().toString();
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-
-                builder.show();
+                ipSetting(context);
             }
             s = new Socket(ip, 5000);
             pw = new PrintWriter(s.getOutputStream());
@@ -168,11 +171,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static void BitMapToString(Bitmap bitmap){
+    public void BitMapToString(Bitmap bitmap,Context context){
         ByteArrayOutputStream baos=new  ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
         byte [] b=baos.toByteArray();
         try {
+                if(ip.isEmpty()){
+                    ipSetting(context);
+                }
             s = new Socket(ip, 5001);
             OutputStream outputStream = s.getOutputStream();
             byte[] size = ByteBuffer.allocate(4).putInt(baos.size()).array();
@@ -180,11 +186,13 @@ public class MainActivity extends AppCompatActivity {
             outputStream.write(baos.toByteArray());
             outputStream.flush();
             s.close();
+
         }catch (IOException e)
         {
             e.printStackTrace();
         }
-        String temp= Base64.encodeToString(b, Base64.DEFAULT);
+
+
     }
     /**
      * A placeholder fragment containing a simple view.
