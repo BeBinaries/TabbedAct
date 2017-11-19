@@ -20,6 +20,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity class = ".SignatureActivity"
+            android:name=".SignatureActivity"
+            android:label="Signature"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="MainActivity" />
+        </activity>
+
+
     </application>
 
 </manifest>

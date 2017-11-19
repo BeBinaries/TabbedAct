@@ -1,6 +1,7 @@
 package com.example.robin.tabbedact;
 
 /**
+<<<<<<< HEAD
  * Created by robin on 19/11/17.
  */
 
@@ -20,8 +21,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.io.ByteArrayOutputStream;
-
 
 public class CanvasView extends View {
 
@@ -34,7 +33,6 @@ public class CanvasView extends View {
     private Paint mPaint;
     private float mX, mY;
     private static final float TOLERANCE = 5;
-
 
     public CanvasView(Context c, AttributeSet attrs) {
         super(c, attrs);
@@ -62,10 +60,6 @@ public class CanvasView extends View {
         mCanvas = new Canvas(mBitmap);
 
     }
-    public void signAlert(){
-
-    }
-
     // override onDraw
     @Override
     protected void onDraw(Canvas canvas) {
@@ -75,7 +69,6 @@ public class CanvasView extends View {
     }
 
     public void clearCanvas() {
-        System.out.println("clearCanvas");
         mPath.reset();
         invalidate();
     }
@@ -83,6 +76,7 @@ public class CanvasView extends View {
         Context mContext = getRootView().getContext();
         new MainActivity().BitMapToString(mBitmap,mContext);
     }
+
 
     // when ACTION_DOWN start touch according to the x,y values
     private void startTouch(float x, float y) {
