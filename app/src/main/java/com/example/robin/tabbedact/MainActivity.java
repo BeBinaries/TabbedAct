@@ -1,6 +1,11 @@
 package com.example.robin.tabbedact;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,24 +19,34 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.ByteBuffer;
+
+import static android.R.id.message;
 
 public class MainActivity extends AppCompatActivity {
     private static Socket s;
     private static PrintWriter pw;
-    public static String message ="";
     private static String ip ="";
+
+    private static final String TAG = "MainActivity";
+    CanvasView customCanvas;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -52,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -68,8 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
-
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -90,37 +103,84 @@ public class MainActivity extends AppCompatActivity {
         }
         if(id ==  R.id.action_IpConfig)
         {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Set IP");
+            ipSetting(MainActivity.this);
+        }
+        if(id == R.id.action_sign) {
+            final android.app.AlertDialog.Builder sign = new android.app.AlertDialog.Builder(this);
+            LayoutInflater inflater = getLayoutInflater();
+            View alertLayout = inflater.inflate(R.layout.layout_alert_sign, null);
+            customCanvas = (CanvasView)alertLayout.findViewById(R.id.signature_canvas);
 
-// Set up the input
-            final EditText input = new EditText(this);
-// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT);
-            builder.setView(input);
-
-// Set up the buttons
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            sign.setTitle("Signature");
+            sign.setView(alertLayout);
+            sign.setCancelable(false);
+            sign.setNegativeButton("Clear", new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    ip = input.getText().toString();
+                public void onClick(DialogInterface dialogInterface, int which) {
+                    //CanvasView customCanvas = (CanvasView) findViewById(R.id.signature_canvas);
+                    customCanvas.clearCanvas();
                 }
             });
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            sign.setPositiveButton("Send", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
+                    customCanvas.sendSignature();
                 }
             });
+            sign.show();
+        }
+        if(id == R.id.action_sign)
+        {
+            /*android.app.AlertDialog.Builder sign = new android.app.AlertDialog.Builder(this);
+            LayoutInflater inflater = getLayoutInflater();
+            final View alertLayout = inflater.inflate(R.layout.layout_alert_sign, null);
+            customCanvas = (CanvasView) findViewById(R.id.signature_canvas);
 
-            builder.show();
+            sign.setTitle("Signature");
+            sign.setView(alertLayout);
+            sign.setCancelable(false);
+
+            android.app.AlertDialog dialog = sign.create();
+            dialog.show();
+            */
+            Intent inte = new Intent(this,SignatureActivity.class);
+            startActivity(inte);
         }
 
         return super.onOptionsItemSelected(item);
     }
+    public void ipSetting(Context context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Set IP");
 
-    public static void send() {
+// Set up the input
+        final EditText input = new EditText(context);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+// Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ip = input.getText().toString();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+    public void send(String message,Context context) {
         try {
+            Log.d(TAG,"inside try block");
+            if(ip.isEmpty()){
+                ipSetting(context);
+            }
             s = new Socket(ip, 5000);
             pw = new PrintWriter(s.getOutputStream());
             pw.write(message);
@@ -130,7 +190,32 @@ public class MainActivity extends AppCompatActivity {
 
         } catch (IOException e) {
             e.printStackTrace();
+            //send(null);
         }
+    }
+
+    public void BitMapToString(Bitmap bitmap,Context context){
+        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
+        byte [] b=baos.toByteArray();
+        try {
+                if(ip.isEmpty()){
+                    ipSetting(context);
+                }
+            s = new Socket(ip, 5001);
+            OutputStream outputStream = s.getOutputStream();
+            byte[] size = ByteBuffer.allocate(4).putInt(baos.size()).array();
+            outputStream.write(size);
+            outputStream.write(baos.toByteArray());
+            outputStream.flush();
+            s.close();
+
+        }catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+
     }
     /**
      * A placeholder fragment containing a simple view.

@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.example.robin.tabbedact"
         minSdkVersion 15
@@ -29,9 +29,11 @@ dependencies {
     compile(name: 'MyScript_ATK-Core-android-component', ext: 'aar')
     compile(name: 'MyScript_ATK-Math-android-component', ext: 'aar')
     compile(name: 'MyScript_ATK-MathWidget-android-widget', ext: 'aar')
-    compile(name: 'MyScript_ATK-Core-android-component', ext: 'aar')
     compile(name: 'MyScript_ATK-Geometry-android-component', ext: 'aar')
     compile(name: 'MyScript_ATK-GeometryWidget-android-widget', ext: 'aar')
+    compile(name: 'MyScript_ATK-Text-android-component', ext: 'aar')
+    compile(name: 'MyScript_ATK-IMCommon-android-component', ext: 'aar')
+    compile(name: 'MyScript_ATK-SingleLineWidget-android-widget', ext: 'aar')
     compile 'com.android.support:design:26.+'
     testCompile 'junit:junit:4.12'
 }
