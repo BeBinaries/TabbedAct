@@ -1,7 +1,10 @@
 package com.example.robin.tabbedact;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -36,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private static Socket s;
     private static PrintWriter pw;
     private static String ip ="";
-
+    CanvasView customCanvas;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -118,9 +122,30 @@ public class MainActivity extends AppCompatActivity {
 
             builder.show();
         }
+        if(id == R.id.action_sign)
+        {
+            /*android.app.AlertDialog.Builder sign = new android.app.AlertDialog.Builder(this);
+            LayoutInflater inflater = getLayoutInflater();
+            final View alertLayout = inflater.inflate(R.layout.layout_alert_sign, null);
+            customCanvas = (CanvasView) findViewById(R.id.signature_canvas);
+
+            sign.setTitle("Signature");
+            sign.setView(alertLayout);
+            sign.setCancelable(false);
+
+            android.app.AlertDialog dialog = sign.create();
+            dialog.show();
+            */
+            Intent inte = new Intent(this,SignatureActivity.class);
+            startActivity(inte);
+        }
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
+
 
     public void send(String message) {
         try {
