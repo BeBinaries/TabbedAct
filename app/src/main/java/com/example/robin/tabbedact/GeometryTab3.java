@@ -1,5 +1,6 @@
 package com.example.robin.tabbedact;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -9,11 +10,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.myscript.atk.geometry.widget.GeometryWidgetApi;
 import com.myscript.atk.math.widget.MathWidgetApi;
 import com.myscript.certificate.MyCertificate;
+
+import static com.example.robin.tabbedact.MainActivity.BitMapToString;
 
 /**
  * Created by robin on 7/10/17.
@@ -31,6 +35,20 @@ public class GeometryTab3 extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.geometry_window3, container, false);
+        Button b1 = (Button)rootView.findViewById(R.id.clearButton);
+        Button b2 = (Button)rootView.findViewById(R.id.sendButton);
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClearButtonClick(v);
+            }
+        });
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onSendButtonClick(view);
+            }
+        });
         return rootView;
     }
 
@@ -113,8 +131,18 @@ public class GeometryTab3 extends Fragment implements
         {
             Log.d(TAG, "Geometry Widget recognition");
         }
-        bmp = widget.getResultAsImage();
+        //bmp = widget.getResultAsImage();
 
-        //new MainActivity().send(MainActivity.BitMapToString(bmp));
+        //BitMapToString(bmp);
+    }
+    private void onClearButtonClick(View v) {
+        widget.clear(true);
+    }
+    private void onSendButtonClick(View v)
+    {
+        Context mContext = getActivity() ;
+        //new MainActivity().send(widget.getResultAsLaTeX(),mContext);
+        bmp = widget.getResultAsImage();
+        BitMapToString(bmp);
     }
 }

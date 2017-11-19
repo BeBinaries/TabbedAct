@@ -3,9 +3,10 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="Ip">IP Configuration</string>
-    <string name="emoticon_button">:-)</string>
     <string name="space_button">Space</string>
-    <string name="delete_button">Del</string>
+    <string name="delete_button">Delete</string>
     <string name="action_clear">Clear</string>
     <string name="input_text"></string>
+    <string name="clearButton">Clear</string>
+    <string name="SendButton">Send</string>
 </resources>

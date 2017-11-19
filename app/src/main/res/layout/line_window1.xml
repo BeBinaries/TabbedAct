@@ -15,24 +15,21 @@
         android:background="#e0e0e0"
         android:gravity="top"
         android:lines="@integer/text_field_lines"
-        android:padding="0dp"
         android:text="@string/input_text"
         android:textColor="#000000"
-        android:textSize="20sp"
-        tools:ignore="InvalidId" />
+        android:textSize="10sp" />
 
     <LinearLayout
         android:id="@+id/candidateBar"
-        android:layout_below="@id/textField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#808080"
-        >
+        android:layout_below="@id/textField"
+        android:background="#808080">
 
         <Button
+            android:id="@+id/b1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/b1"
             android:layout_weight="1"
             android:maxLines="1"
             android:onClick="onCandidateButtonClick"
@@ -41,39 +38,36 @@
             android:textSize="20sp" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/b2"
-            android:layout_weight="1"
-            android:maxLines="1"
-            android:textAllCaps="false"
-            android:textSize="20sp"
-            android:textColor="#000000"
-            android:onClick="onCandidateButtonClick"
-            />
-
-        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:maxLines="1"
+            android:onClick="onCandidateButtonClick"
+            android:textAllCaps="false"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <Button
             android:id="@+id/b3"
-            android:layout_weight="1"
-            android:maxLines="1"
-            android:textAllCaps="false"
-            android:textSize="20sp"
-            android:textColor="#000000"
-            android:onClick="onCandidateButtonClick"
-            />
-
-        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/b4"
-            android:minWidth="0dp"
-            android:text="\u25BC"
-            android:textSize="20sp"
+            android:layout_weight="1"
+            android:maxLines="1"
+            android:onClick="onCandidateButtonClick"
+            android:textAllCaps="false"
             android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/b4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
             android:onClick="onMoreButtonClick"
-            />
+            android:text="\u25BC"
+            android:textColor="#000000"
+            android:textSize="20sp" />
 
     </LinearLayout>
 
@@ -82,38 +76,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#808080"
-        >
+        android:background="#808080">
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="@string/emoticon_button"
-            android:textSize="20sp"
-            android:textColor="#000000"
-            android:onClick="onEmoticonButtonClick"
-            />
-
-        <Button
+            android:id="@+id/B5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/space_button"
-            android:textSize="20sp"
-            android:textColor="#000000"
             android:onClick="onSpaceButtonClick"
-            />
+            android:text="@string/space_button"
+            android:textColor="#000000"
+            android:textSize="20sp" />
 
         <Button
+            android:id="@+id/B6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="@string/delete_button"
-            android:textSize="20sp"
-            android:textColor="#000000"
+            android:layout_weight="1"
             android:onClick="onDeleteButtonClick"
-            />
+            android:text="@string/delete_button"
+            android:textColor="#000000"
+            android:textSize="20sp" />
 
     </LinearLayout>
 
@@ -121,19 +104,20 @@
         android:id="@+id/widget"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/buttons"
-        android:layout_below="@id/candidateBar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/candidateBar"
+        android:layout_marginBottom="50dp"
         android:background="#f0f0f0" />
 
     <GridView
         android:id="@+id/candidatePanel"
-        android:layout_below="@id/candidateBar"
-        android:layout_above="@id/buttons"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="5"
+        android:layout_above="@id/buttons"
+        android:layout_below="@id/candidateBar"
         android:background="#808080"
-        android:visibility="gone"
-        />
+        android:numColumns="5"
+        android:visibility="gone" />
 
 </RelativeLayout>

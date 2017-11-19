@@ -62,6 +62,8 @@ public class LineTab1 extends Fragment implements
         Button b2 = (Button)rootView.findViewById(R.id.b2);
         Button b3 = (Button)rootView.findViewById(R.id.b3);
         Button b4 = (Button)rootView.findViewById(R.id.b4);
+        Button b5 = (Button)rootView.findViewById(R.id.B5);
+        Button b6 = (Button)rootView.findViewById(R.id.B6);
 
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +89,18 @@ public class LineTab1 extends Fragment implements
                 onMoreButtonClick(v);
             }
         });
-
+        b5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSpaceButtonClick(v);
+            }
+        });
+        b6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onDeleteButtonClick(v);
+            }
+        });
         return rootView;
     }
 
@@ -152,27 +165,6 @@ public class LineTab1 extends Fragment implements
         mWidget.setTextColor(redColorValue);
         isCorrectionMode = 0;
     }
-
-    /*@Override
-    public void onClick(View v) {
-        LineTab1 lineTab1 = new LineTab1();
-        switch (v.getId()) {
-            case R.id.b1:
-                lineTab1.onCandidateButtonClick(v);
-                break;
-            case R.id.b2:
-                lineTab1.onCandidateButtonClick(v);
-                break;
-            case R.id.b3:
-                lineTab1.onCandidateButtonClick(v);
-                break;
-            case R.id.b4:
-                lineTab1.onMoreButtonClick(v);
-                break;
-            default:
-                //
-        }
-    }*/
     @Override
     public void onDestroyView()
     {
@@ -199,7 +191,8 @@ public class LineTab1 extends Fragment implements
         if (tag != null) {
             mWidget.replaceCharacters(tag.start, tag.end, tag.text);
             Log.d(TAG, "candidate button click");
-            new MainActivity().send(tag.text);
+            Context mContext = getActivity() ;
+            new MainActivity().send(tag.text,mContext);
         }
     }
 
