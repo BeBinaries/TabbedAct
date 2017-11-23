@@ -35,6 +35,14 @@
             android:text="@string/clearButton"
             android:textColor="#234260"
             android:textSize="20sp" />
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="@string/SaveButton"
+            android:textColor="#234260"
+            android:textSize="20sp" />
 
 
         <Button

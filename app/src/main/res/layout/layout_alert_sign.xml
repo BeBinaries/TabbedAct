@@ -1,26 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<<<<<<< HEAD
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-=======
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
->>>>>>> 784786fbb6a4ffb0afdc17d667f5fd96d4107a41
+
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-<<<<<<< HEAD
     android:orientation="vertical" >
-
-    <com.example.robin.tabbedact.CanvasView
-        android:id="@+id/signature_canvas"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textColor="#FFFFFF" />
-
-</FrameLayout>
-=======
-    android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
@@ -57,7 +44,7 @@
             android:text="Send"
             android:layout_weight="1"
             android:id="@+id/send"
+            android:onClick="sendBit"
             />
     </LinearLayout>
 </LinearLayout>
->>>>>>> 784786fbb6a4ffb0afdc17d667f5fd96d4107a41

@@ -10,4 +10,5 @@
     <string name="clearButton">Clear</string>
     <string name="SendButton">Send</string>
     <string name="Signature">Signature</string>
+    <string name="SaveButton">Save</string>
 </resources>
