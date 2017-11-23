@@ -20,4 +20,8 @@ public class SignatureActivity extends Activity {
 
         customCanvas.clearCanvas();
     }
+    public void sendBit(View v)
+    {
+        customCanvas.sendSignature();
+    }
 }

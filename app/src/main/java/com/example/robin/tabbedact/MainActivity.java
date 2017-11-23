@@ -3,6 +3,7 @@ package com.example.robin.tabbedact;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -46,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
     private static String ip ="";
 
     private static final String TAG = "MainActivity";
+    private final String IP_FILE_NAME = "ipfile";
+    private final String IP_ADDRESS = "ipaddress";
+
+
+
     CanvasView customCanvas;
 
     /**
@@ -63,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
+    private SharedPreferences ipPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +84,11 @@ public class MainActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+
+
+        System.out.println("Rajan");
+
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -105,44 +118,8 @@ public class MainActivity extends AppCompatActivity {
         {
             ipSetting(MainActivity.this);
         }
-        if(id == R.id.action_sign) {
-            final android.app.AlertDialog.Builder sign = new android.app.AlertDialog.Builder(this);
-            LayoutInflater inflater = getLayoutInflater();
-            View alertLayout = inflater.inflate(R.layout.layout_alert_sign, null);
-            customCanvas = (CanvasView)alertLayout.findViewById(R.id.signature_canvas);
-
-            sign.setTitle("Signature");
-            sign.setView(alertLayout);
-            sign.setCancelable(false);
-            sign.setNegativeButton("Clear", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int which) {
-                    //CanvasView customCanvas = (CanvasView) findViewById(R.id.signature_canvas);
-                    customCanvas.clearCanvas();
-                }
-            });
-            sign.setPositiveButton("Send", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    customCanvas.sendSignature();
-                }
-            });
-            sign.show();
-        }
         if(id == R.id.action_sign)
         {
-            /*android.app.AlertDialog.Builder sign = new android.app.AlertDialog.Builder(this);
-            LayoutInflater inflater = getLayoutInflater();
-            final View alertLayout = inflater.inflate(R.layout.layout_alert_sign, null);
-            customCanvas = (CanvasView) findViewById(R.id.signature_canvas);
-
-            sign.setTitle("Signature");
-            sign.setView(alertLayout);
-            sign.setCancelable(false);
-
-            android.app.AlertDialog dialog = sign.create();
-            dialog.show();
-            */
             Intent inte = new Intent(this,SignatureActivity.class);
             startActivity(inte);
         }
@@ -153,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Set IP");
 
+        final Context c = context;
 // Set up the input
         final EditText input = new EditText(context);
 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
@@ -164,6 +142,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ip = input.getText().toString();
+                ipPref = c.getSharedPreferences(IP_FILE_NAME,Context.MODE_PRIVATE);
+                SharedPreferences.Editor ipPrefEditor = ipPref.edit();
+                ipPrefEditor.putString(IP_ADDRESS,ip);
+                ipPrefEditor.apply();
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -175,9 +157,14 @@ public class MainActivity extends AppCompatActivity {
 
         builder.show();
     }
+
+
+
     public void send(String message,Context context) {
         try {
-            Log.d(TAG,"inside try block");
+            //Log.d(TAG,"inside try block");
+            SharedPreferences ipPref = context.getSharedPreferences(IP_FILE_NAME,Context.MODE_PRIVATE);
+            ip = ipPref.getString(IP_ADDRESS,"");
             if(ip.isEmpty()){
                 ipSetting(context);
             }
@@ -197,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
     public void BitMapToString(Bitmap bitmap,Context context){
         ByteArrayOutputStream baos=new  ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
-        byte [] b=baos.toByteArray();
+        //byte [] b=baos.toByteArray();
         try {
                 if(ip.isEmpty()){
                     ipSetting(context);
