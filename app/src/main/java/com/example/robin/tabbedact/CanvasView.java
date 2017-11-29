@@ -1,26 +1,27 @@
 package com.example.robin.tabbedact;
 
 /**
-<<<<<<< HEAD
- * Created by robin on 19/11/17.
+ * Created by Shashank on 17-11-2017.
  */
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
-import android.util.Base64;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
+        import android.content.Context;
+        import android.graphics.Bitmap;
+        import android.graphics.Canvas;
+        import android.graphics.Color;
+        import android.graphics.Paint;
+        import android.graphics.Path;
+        import android.util.AttributeSet;
+        import android.util.Base64;
+        import android.util.Log;
+        import android.view.MotionEvent;
+        import android.view.View;
+        import android.widget.LinearLayout;
 
+        import java.io.ByteArrayOutputStream;
+        import java.io.IOException;
+        import java.io.OutputStream;
+        import java.net.Socket;
+        import java.nio.ByteBuffer;
 
 public class CanvasView extends View {
 
@@ -58,23 +59,70 @@ public class CanvasView extends View {
         // your Canvas will draw onto the defined Bitmap
         mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         mCanvas = new Canvas(mBitmap);
-
     }
+
     // override onDraw
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         // draw the mPath with the mPaint on the canvas when onDraw
         canvas.drawPath(mPath, mPaint);
+
     }
+    /*public void bitMapToString(Bitmap bitmap,Context context){
+        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        //byte [] b=baos.toByteArray();
+        try {
+            if(MainActivity.ip.isEmpty()){
+                new MainActivity().ipSetting(context);
+            }
+            MainActivity.s = new Socket(MainActivity.ip, 5001);
+            OutputStream outputStream = MainActivity.s.getOutputStream();
+            byte[] size = ByteBuffer.allocate(4).putInt(baos.size()).array();
+            outputStream.write(size);
+            outputStream.write(baos.toByteArray());
+            outputStream.flush();
+            MainActivity.s.close();
+
+        }catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+
+    }*/
+
 
     public void clearCanvas() {
         mPath.reset();
         invalidate();
     }
-    public void sendSignature(){
-        Context mContext = getRootView().getContext();
-        new MainActivity().BitMapToString(mBitmap,mContext);
+    public void sendSignature(LinearLayout l){
+
+        Bitmap bmp = Bitmap.createBitmap(l.getDrawingCache());
+        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, baos);
+
+        try {
+            if(MainActivity.ip.isEmpty()){
+                new MainActivity().ipSetting(context);
+            }
+            MainActivity.s = new Socket(MainActivity.ip, 5001);
+            OutputStream outputStream = MainActivity.s.getOutputStream();
+            byte[] size = ByteBuffer.allocate(4).putInt(baos.size()).array();
+            outputStream.write(size);
+            outputStream.write(baos.toByteArray());
+            outputStream.flush();
+            MainActivity.s.close();
+
+        }catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        //Context mContext = getRootView().getContext();
+        //bitMapToString(bmp, mContext);
     }
 
 
