@@ -29,6 +29,7 @@ public class GeometryTab3 extends Fragment implements
 
     private GeometryWidgetApi widget;
     private Bitmap bmp;
+    private Bitmap bp;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -142,6 +143,7 @@ public class GeometryTab3 extends Fragment implements
         Context mContext = getActivity() ;
         //new MainActivity().send(widget.getResultAsLaTeX(),mContext);
         bmp = widget.getResultAsImage();
-        new MainActivity(). BitMapToString(bmp,mContext);
+        bp = Bitmap.createScaledBitmap(bmp,200,200,false);
+        new MainActivity(). BitMapToString(bp,mContext);
     }
 }

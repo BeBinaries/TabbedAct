@@ -10,17 +10,9 @@ package com.example.robin.tabbedact;
         import android.graphics.Paint;
         import android.graphics.Path;
         import android.util.AttributeSet;
-        import android.util.Base64;
-        import android.util.Log;
         import android.view.MotionEvent;
         import android.view.View;
         import android.widget.LinearLayout;
-
-        import java.io.ByteArrayOutputStream;
-        import java.io.IOException;
-        import java.io.OutputStream;
-        import java.net.Socket;
-        import java.nio.ByteBuffer;
 
 public class CanvasView extends View {
 
@@ -33,6 +25,7 @@ public class CanvasView extends View {
     private Paint mPaint;
     private float mX, mY;
     private static final float TOLERANCE = 5;
+    Bitmap bmp;
 
     public CanvasView(Context c, AttributeSet attrs) {
         super(c, attrs);
@@ -68,29 +61,6 @@ public class CanvasView extends View {
         canvas.drawPath(mPath, mPaint);
 
     }
-    /*public void bitMapToString(Bitmap bitmap,Context context){
-        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        //byte [] b=baos.toByteArray();
-        try {
-            if(MainActivity.ip.isEmpty()){
-                new MainActivity().ipSetting(context);
-            }
-            MainActivity.s = new Socket(MainActivity.ip, 5001);
-            OutputStream outputStream = MainActivity.s.getOutputStream();
-            byte[] size = ByteBuffer.allocate(4).putInt(baos.size()).array();
-            outputStream.write(size);
-            outputStream.write(baos.toByteArray());
-            outputStream.flush();
-            MainActivity.s.close();
-
-        }catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
-
-    }*/
 
 
     public void clearCanvas() {
@@ -99,28 +69,11 @@ public class CanvasView extends View {
     }
     public void sendSignature(LinearLayout l){
 
-        Bitmap bmp = Bitmap.createBitmap(l.getDrawingCache());
-        /*ByteArrayOutputStream baos=new  ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.PNG, 100, baos);
-
-        try {
-            if(MainActivity.ip.isEmpty()){
-                new MainActivity().ipSetting(context);
-            }
-            MainActivity.s = new Socket(MainActivity.ip, 5001);
-            OutputStream outputStream = MainActivity.s.getOutputStream();
-            byte[] size = ByteBuffer.allocate(4).putInt(baos.size()).array();
-            outputStream.write(size);
-            outputStream.write(baos.toByteArray());
-            outputStream.flush();
-            MainActivity.s.close();
-
-        }catch (IOException e)
-        {
-            e.printStackTrace();
-        }*/
-        new MainActivity().BitMapToString(bmp,context);
-
+        bmp = Bitmap.createBitmap(l.getDrawingCache());
+        //Bitmap cropped = Bitmap.createBitmap(bmp, 1, 70, bmp.getWidth()-100, bmp.getHeight() - 100);
+        Bitmap result =Bitmap.createBitmap(bmp,l.getLeft()+10, l.getTop()+70, l.getWidth()-20, l.getHeight()-130);
+        new MainActivity().BitMapToString(result,context);
+        l.setDrawingCacheEnabled(false);
     }
 
 

@@ -44,7 +44,7 @@ import static android.R.id.message;
 public class MainActivity extends AppCompatActivity {
     public static Socket s;
     public static PrintWriter pw;
-    public static String ip ="";
+    public static String ip ="192.168.43.22";
 
     private static final String TAG = "MainActivity";
     private final String IP_FILE_NAME = "ipfile";
