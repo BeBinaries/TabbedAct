@@ -1,8 +1,10 @@
 package com.example.robin.tabbedact;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 
 public class SignatureActivity extends Activity {
 
@@ -22,6 +24,7 @@ public class SignatureActivity extends Activity {
     }
     public void sendBit(View v)
     {
+
         customCanvas.sendSignature();
     }
 }

@@ -20,6 +20,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.LinearLayout;
 
 
 public class CanvasView extends View {
@@ -73,8 +74,10 @@ public class CanvasView extends View {
         invalidate();
     }
     public void sendSignature(){
-        Context mContext = getRootView().getContext();
-        new MainActivity().BitMapToString(mBitmap,mContext);
+        //Context mContext = getRootView().getContext();
+
+        new MainActivity().BitMapToString(mBitmap,context);
+        //new MainActivity().BitMapToString(loadBitmapFromView(view),mContext);
     }
 
 
@@ -123,5 +126,28 @@ public class CanvasView extends View {
                 break;
         }
         return true;
+    }
+    public static Bitmap loadBitmapFromView(View view) {
+
+        // width measure spec
+        int widthSpec = View.MeasureSpec.makeMeasureSpec(
+                view.getMeasuredWidth(), View.MeasureSpec.AT_MOST);
+        // height measure spec
+        int heightSpec = View.MeasureSpec.makeMeasureSpec(
+                view.getMeasuredHeight(), View.MeasureSpec.AT_MOST);
+        // measure the view
+        view.measure(widthSpec, heightSpec);
+        // set the layout sizes
+        view.layout(view.getLeft(), view.getTop(), view.getMeasuredWidth() + view.getLeft(), view.getMeasuredHeight() + view.getTop());
+        // create the bitmap
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        // create a canvas used to get the view's image and draw it on the bitmap
+        Canvas c = new Canvas(bitmap);
+        // position the image inside the canvas
+        c.translate(-view.getScrollX(), -view.getScrollY());
+        // get the canvas
+        view.draw(c);
+
+        return bitmap;
     }
 }
