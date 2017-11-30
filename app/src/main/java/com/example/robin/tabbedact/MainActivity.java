@@ -42,9 +42,9 @@ import java.nio.ByteBuffer;
 import static android.R.id.message;
 
 public class MainActivity extends AppCompatActivity {
-    private static Socket s;
-    private static PrintWriter pw;
-    private static String ip ="";
+    public static Socket s;
+    public static PrintWriter pw;
+    public static String ip ="";
 
     private static final String TAG = "MainActivity";
     private final String IP_FILE_NAME = "ipfile";
